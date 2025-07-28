@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Open New Pop-up Window</title>
+    <!-- Tailwind CSS CDN for modern styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom CSS for the Inter font and basic body styling */
+        body {
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .container {
+            background-color: #ffffff;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            max-width: 500px;
+            width: 100%;
+        }
+
+        .popup-message-box {
+            display: none; /* Hidden by default */
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+            border: 1px solid #e0e0e0;
+        }
+
+        .popup-message-box h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .popup-message-box p {
+            font-size: 1rem;
+            color: #666;
+            margin-bottom: 25px;
+        }
+
+        .popup-message-box button {
+            background-color: #4f46e5;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s ease;
+        }
+
+        .popup-message-box button:hover {
+            background-color: #4338ca;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-3xl font-bold text-gray-800 mb-6">Open a New Pop-up Window</h1>
+        <p class="text-gray-600 mb-8">
+            Click the button below to open a new, small pop-up window.
+            Note: Browser pop-up blockers might prevent this from opening automatically.
+        </p>
+        <button
+            id="openPopupButton"
+            class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-6 rounded-lg shadow-lg transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-75"
+        >
+            Open Pop-up Window
+        </button>
+    </div>
+
+    <!-- Custom Message Box for alerts -->
+    <div id="messageBox" class="popup-message-box">
+        <h3 id="messageBoxTitle"></h3>
+        <p id="messageBoxContent"></p>
+        <button id="messageBoxCloseButton">OK</button>
+    </div>
+
+    <script>
+        // Function to display a custom message box instead of alert()
+        function showMessageBox(title, message) {
+            const messageBox = document.getElementById('messageBox');
+            const messageBoxTitle = document.getElementById('messageBoxTitle');
+            const messageBoxContent = document.getElementById('messageBoxContent');
+            const messageBoxCloseButton = document.getElementById('messageBoxCloseButton');
+
+            messageBoxTitle.textContent = title;
+            messageBoxContent.textContent = message;
+            messageBox.style.display = 'block';
+
+            messageBoxCloseButton.onclick = function() {
+                messageBox.style.display = 'none';
+            };
+        }
+
+        // Get the button element
+        const openPopupButton = document.getElementById('openPopupButton');
+
+        // Add a click event listener to the button
+        openPopupButton.addEventListener('click', () => {
+            // Define the URL for the new window.
+            // You can replace this with any valid URL (e.g., 'https://www.google.com').
+            // For this example, we'll create a simple inline HTML content.
+            const newWindowContent = `
+                <!DOCTYPE html>
+                <html lang="en">
+                <head>
+                    <meta charset="UTF-8">
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                    <title>Pop-up Window</title>
+                    <style>
+                        body {
+                            font-family: 'Inter', sans-serif;
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                            height: 100vh;
+                            background-color: #e0f2f7;
+                            margin: 0;
+                            color: #333;
+                            text-align: center;
+                            flex-direction: column;
+                        }
+                        h1 {
+                            color: #2a6f8f;
+                            font-size: 2rem;
+                            margin-bottom: 15px;
+                        }
+                        p {
+                            font-size: 1.1rem;
+                            color: #555;
+                        }
+                        button {
+                            background-color: #2a6f8f;
+                            color: white;
+                            padding: 10px 20px;
+                            border: none;
+                            border-radius: 8px;
+                            cursor: pointer;
+                            font-size: 1rem;
+                            margin-top: 20px;
+                            transition: background-color 0.3s ease;
+                        }
+                        button:hover {
+                            background-color: #1a5f7f;
+                        }
+                    </style>
+                </head>
+                <body>
+                    <h1>Hello from the Pop-up!</h1>
+                    <p>This is a new window opened using JavaScript.</p>
+                    <button onclick="window.close()">Close this Window</button>
+                </body>
+                </html>
+            `;
+
+            // Open a new window
+            // The first argument is the URL (or data URI for inline content).
+            // The second argument is the window name (can be used to target it later).
+            // The third argument is a string of features, separated by commas.
+            const popupWindow = window.open(
+                'about:blank', // Use 'about:blank' to open an empty window
+                '_blank',      // Name of the window (opens in a new tab/window)
+                'width=600,height=400,toolbar=no,location=no,menubar=no,scrollbars=yes,resizable=yes'
+            );
+
+            // Check if the pop-up window was successfully opened
+            if (popupWindow) {
+                // Write the content to the new window's document
+                popupWindow.document.write(newWindowContent);
+                popupWindow.document.close(); // Close the document stream
+                console.log('Pop-up window opened successfully!');
+            } else {
+                // If popupWindow is null, it means the pop-up was blocked
+                showMessageBox(
+                    'Pop-up Blocked!',
+                    'Your browser might have blocked the pop-up window. Please allow pop-ups for this site.'
+                );
+            }
+        });
+    </script>
+</body>
+</html>
